@@ -26,6 +26,7 @@ before_script:
   - sudo service nginx restart
   - sudo service php5-fpm restart
   - cp ./protected/extensions/yii-LocalFS/travis-conf/project/* ./protected/config/
+  - cd ./protected/tests
 notifications:
   email: false
-script: "cd ./protected/tests && phpunit --debug ."
+script: phpunit --verbose .

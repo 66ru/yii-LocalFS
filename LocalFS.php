@@ -76,7 +76,7 @@ class LocalFS extends AFileSystem
 			$originalName = $path;
 		$ext = strtolower(CFileHelper::getExtension($originalName));
 		if (empty($ext)) { // we have empty extension. Trying determine using mime type
-			$ext = EFileHelper::getExtensionByMimeType($path);
+			$ext = self::getExtensionByMimeType($path);
 		}
 
 		$uid = $this->getUniqId();

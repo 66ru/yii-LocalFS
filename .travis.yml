@@ -37,4 +37,4 @@ before_script:
   - php --version
 notifications:
   email: false
-script: phpunit --verbose .
+script: echo "set env MALLOC_CHECK_=3" && echo "r" | gdb --args php /usr/bin/phpunit .

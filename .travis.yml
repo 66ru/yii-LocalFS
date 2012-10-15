@@ -22,7 +22,7 @@ before_script:
   - sudo rm /etc/nginx/sites-enabled/*
   - sudo cp ./protected/extensions/yii-LocalFS/travis-conf/site.nginx /etc/nginx/sites-enabled/
   - sudo cp ./protected/extensions/yii-LocalFS/travis-conf/www.conf /etc/php5/fpm/pool.d/www.conf
-  - sudo pear uninstall xdebug
+  - sudo rm /home/travis/.phpenv/versions/5.3.17/etc/conf.d/* -R
   - sudo pear channel-discover pear.phpunit.de
   - sudo pear channel-discover pear.symfony.com
   - sudo pear install -a phpunit/PHPUnit

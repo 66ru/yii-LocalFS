@@ -14,16 +14,16 @@ before_script:
   - mkdir ./protected/tests/log
   - sudo apt-get update
   - sudo apt-get install nginx-full php5-fpm memcached php5-memcached
-  - sudo cp ./travis-conf/conf.d/* /etc/php5/fpm/conf.d/
-  - sudo cp ./travis-conf/php.ini /etc/php5/fpm/php.ini
+  - sudo cp ./protected/extensions/yii-LocalFS/travis-conf/conf.d/* /etc/php5/fpm/conf.d/
+  - sudo cp ./protected/extensions/yii-LocalFS/travis-conf/php.ini /etc/php5/fpm/php.ini
   - sudo rm /etc/nginx/sites-enabled/*
-  - sudo cp ./travis-conf/site.nginx /etc/nginx/sites-enabled/
-  - sudo cp ./travis-conf/www.conf /etc/php5/fpm/pool.d/www.conf
+  - sudo cp ./protected/extensions/yii-LocalFS/travis-conf/site.nginx /etc/nginx/sites-enabled/
+  - sudo cp ./protected/extensions/yii-LocalFS/travis-conf/www.conf /etc/php5/fpm/pool.d/www.conf
   - sudo pear channel-discover pear.phpunit.de
   - sudo pear install -a -f phpunit/PHPUnit
   - sudo service nginx restart
   - sudo service php5-fpm restart
-  - cp ./../yii-LocalFS/travis-conf/project/* ./protected/config/
+  - cp ./protected/extensions/yii-LocalFS/travis-conf/project/* ./protected/config/
 notifications:
   email: false
 script: "cd ./protected/tests && phpunit --debug ."

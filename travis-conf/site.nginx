@@ -1,0 +1,37 @@
+server {
+    listen       80 default;
+    server_name  .localhost;
+
+    set $root_path  '/home/travis/builds/mediasite/fs-test';
+
+	access_log /home/travis/builds/mediasite/fs-test/protected/tests/log/host.access.log;
+    error_log  /home/travis/builds/mediasite/fs-test/protected/tests/log/host.error.log error;
+
+    location / {
+        try_files $uri $uri/ @fallback;
+        root   $root_path;
+        index  index.php;
+    }
+
+    location @fallback
+    {
+        rewrite ^((?!/go).*?/[^\.]*?[^/\.])$ $1/ permanent;
+        rewrite ^(.*)$ /index.php last;
+    }
+
+    location ~ \.php$ {
+        root           $root_path;
+        fastcgi_pass   127.0.0.1:9000;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $root_path/$fastcgi_script_name;
+        fastcgi_param  PATH_INFO $fastcgi_script_name;
+        include        fastcgi_params;
+    }
+
+    # deny access to .htaccess files, if Apache's document root
+    # concurs with nginx's one
+    #
+    location ~ /\.ht {
+        deny  all;
+    }
+}

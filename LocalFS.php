@@ -1,7 +1,8 @@
 <?php
-Yii::import('ext.yii-localFS.models.*');
-Yii::import('ext.yii-localFS.components.*');
-Yii::import('ext.yii-localFS.components.image.CImageComponent');
+Yii::setPathOfAlias('localFS',__DIR__);
+Yii::import('localFS.models.*');
+Yii::import('localFS.components.*');
+Yii::import('localFS.components.image.CImageComponent');
 /**
  * File system extension for Yii Framework
  * <hr>

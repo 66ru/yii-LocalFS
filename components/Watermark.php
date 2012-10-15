@@ -73,9 +73,6 @@ class Watermark
 			'jpeg-quality' => 90,
 		);
 
-		if (self::isAnimated($input))
-			return true;
-
 		foreach ($defOptions as $k => $v) {
 			if (!isset($options[$k])) {
 				$options[$k] = $v;

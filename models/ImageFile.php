@@ -155,6 +155,8 @@ class ImageFile extends BaseFile
 	 */
 	public function watermark()
 	{
+		if(!is_file(Yii::app()->params['WATERMARK']))
+			return $this;
 		if((int)Yii::app()->params['WATERMARK_MIN_WIDTH'] > $this->width)
 			return $this;
 		$watermark_options = array(

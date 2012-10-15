@@ -1,6 +1,7 @@
 <?php
 
-Yii::import('ext.localFS.components.image.drivers.Image_GD_Driver');
+Yii::import('localFS.components.image.drivers.*');
+Yii::import('localFS.components.image.Image');
 
 class CImageComponent extends CComponent
 {

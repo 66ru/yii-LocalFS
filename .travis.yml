@@ -9,6 +9,8 @@ before_script:
   - git clone git://github.com/yiisoft/yii.git libs/yii
   - echo "yes" | php libs/yii/framework/yiic webapp . git
   - ln -s ../yii-LocalFS/ ./protected/extensions/yii-LocalFS
+  - ls -lha ../
+  - ls -lha ../yii-LocalFS/
   - ls -lha ./protected/extensions/yii-LocalFS
   - ls -lha ./protected/extensions/yii-LocalFS/
   - ls -lha ./protected/extensions/yii-LocalFS/tests

@@ -1,6 +1,6 @@
 <?php
-require_once "ETestCase.php";
-class FsTest extends ETestCase
+//require_once "ETestCase.php";
+class FsTest extends CTestCase
 {
 	private $fixturesPath;
 

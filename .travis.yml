@@ -36,4 +36,4 @@ before_script:
   - cd ./protected/tests
 notifications:
   email: false
-script: php phpunit .
+script: phpunit .

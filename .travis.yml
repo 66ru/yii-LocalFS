@@ -37,4 +37,4 @@ before_script:
   - which phpunit
 notifications:
   email: false
-script: echo "set env MALLOC_CHECK_=3" && echo "r" | gdb --args /usr/bin/php /usr/bin/phpunit .
+script: echo "set env MALLOC_CHECK_=3" && echo "r" | gdb --args /usr/bin/php /home/travis/.phpenv/shims/phpunit .

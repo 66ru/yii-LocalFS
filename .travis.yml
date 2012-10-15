@@ -24,7 +24,10 @@ before_script:
   - sudo pear channel-discover pear.phpunit.de
   - sudo pear install -a -f phpunit/PHPUnit
   - sudo service nginx restart
-  - sudo service php5-fpm restart
+  - sleep 5
+  - sudo service php5-fpm stop
+  - sleep 5
+  - sudo service php5-fpm start
   - cp ./protected/extensions/yii-LocalFS/travis-conf/project/* ./protected/config/
   - cd ./protected/tests
 notifications:

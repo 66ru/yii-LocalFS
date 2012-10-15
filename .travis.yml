@@ -34,7 +34,7 @@ before_script:
   - sleep 5
   - cp ./protected/extensions/yii-LocalFS/travis-conf/project/* ./protected/config/
   - cd ./protected/tests
-  - php --version
+  - which phpunit
 notifications:
   email: false
 script: echo "set env MALLOC_CHECK_=3" && echo "r" | gdb --args /usr/bin/php /usr/bin/phpunit .

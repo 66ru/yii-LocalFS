@@ -1,4 +1,11 @@
-yii-LocalFS
+File system extension for Yii Framework
 ===========
 
-yii-LocalFS
+Requirements:
+
+* GD
+* ImageMagick
+
+Note: currently planing to migrate to ImageMagick
+
+Currently works only under *nix systems

@@ -9,8 +9,10 @@ before_script:
   - git clone git://github.com/yiisoft/yii.git libs/yii
   - echo "yes" | php libs/yii/framework/yiic webapp . git
   - ln -s ../yii-LocalFS/ ./protected/extensions/yii-LocalFS
+  - ls -lha ./protected/extensions/yii-LocalFS
+  - ls -lha ./protected/extensions/yii-LocalFS/tests
   - rm ./protected/tests -R
-  - cp ./protected/extensions/yii-LocalFS/tests ./protected/
+  - cp ./protected/extensions/yii-LocalFS/tests ./protected/ -R
   - mkdir ./protected/tests/log
   - sudo apt-get update
   - sudo apt-get install nginx-full php5-fpm memcached php5-memcached

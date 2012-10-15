@@ -90,6 +90,7 @@ class LocalFS extends AFileSystem
 		chmod($publishedFileName, 0666);
 
 		$mimeType = CFileHelper::getMimeType($path);
+		var_dump($mimeType);
 		$size = filesize($path);
 		$class = $this->getFileClass($mimeType);
 

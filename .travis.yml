@@ -15,7 +15,7 @@ before_script:
   - cp ./protected/extensions/yii-LocalFS/tests/* ./protected/tests/ -R
   - mkdir ./protected/tests/log
   - sudo apt-get update
-  - sudo apt-get install nginx-full php5-fpm php5 php5-cli php5-dev memcached php5-memcached gdb php5-curl php5-gd php5-imagick php5-dbg
+  - sudo apt-get install nginx-full php5-fpm php5 php5-cli php5-dev memcached php5-memcached php5-curl php5-gd php5-imagick libmagic1-dev
   - sudo rm /etc/php5/fpm/conf.d/* -R
   - sudo cp ./protected/extensions/yii-LocalFS/travis-conf/conf.d/* /etc/php5/fpm/conf.d/
   - sudo cp ./protected/extensions/yii-LocalFS/travis-conf/php.ini /etc/php5/fpm/php.ini
@@ -30,13 +30,9 @@ before_script:
   - sudo pear install phpunit/DbUnit
   - sudo pear install phpunit/PHPUnit_Story
   - sudo service nginx restart
-  - sleep 5
-  - sudo service php5-fpm stop
-  - sleep 5
-  - sudo service php5-fpm start
-  - sleep 5
+  - sudo service php5-fpm restart
   - cp ./protected/extensions/yii-LocalFS/travis-conf/project/* ./protected/config/
   - cd ./protected/tests
 notifications:
   email: false
-script: phpunit .
+script: phpunit --verbose --debug .

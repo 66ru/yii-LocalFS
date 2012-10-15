@@ -33,7 +33,7 @@ before_script:
   - sudo service php5-fpm start
   - cp ./protected/extensions/yii-LocalFS/travis-conf/project/* ./protected/config/
   - cd ./protected/tests
-  - php --info | grep xdebug
+  - php --version
 notifications:
   email: false
 script: phpunit --verbose .

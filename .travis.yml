@@ -26,6 +26,9 @@ before_script:
   - sudo pear channel-discover pear.phpunit.de
   - sudo pear channel-discover pear.symfony.com
   - sudo pear install -a phpunit/PHPUnit
+  - sudo pear install phpunit/PHPUnit_Selenium
+  - sudo pear install phpunit/DbUnit
+  - sudo pear install phpunit/PHPUnit_Story
   - sudo service nginx restart
   - sleep 5
   - sudo service php5-fpm stop

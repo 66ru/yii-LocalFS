@@ -14,7 +14,6 @@ before_script:
   - rm ./protected/tests/unit -R
   - cp ./protected/extensions/yii-LocalFS/tests/* ./protected/tests/ -R
   - mkdir ./protected/tests/log
-  - sudo apt-get remove php5-xdebug
   - sudo apt-get update
   - sudo apt-get install nginx-full php5-fpm memcached php5-memcached
   - sudo rm /etc/php5/fpm/conf.d/* -R
@@ -23,8 +22,10 @@ before_script:
   - sudo rm /etc/nginx/sites-enabled/*
   - sudo cp ./protected/extensions/yii-LocalFS/travis-conf/site.nginx /etc/nginx/sites-enabled/
   - sudo cp ./protected/extensions/yii-LocalFS/travis-conf/www.conf /etc/php5/fpm/pool.d/www.conf
+  - sudo pear uninstall xdebug
   - sudo pear channel-discover pear.phpunit.de
-  - sudo pear install -a -f phpunit/PHPUnit
+  - sudo pear channel-discover pear.symfony.com
+  - sudo pear install -a phpunit/PHPUnit
   - sudo service nginx restart
   - sleep 5
   - sudo service php5-fpm stop

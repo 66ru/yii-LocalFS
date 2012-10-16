@@ -60,4 +60,17 @@ class FsTest extends ETestCase
 		$url = $file->getThumbnail(array(200,400, 'cz' => true));
 		$this->assertUrlExists($url,'Check 200x400 cropZoom thumb by url');
 	}
+
+	public function testPublishVideoFile()
+	{
+		/**
+		 * @var VideoFile $file
+		 */
+		var_dump(realpath($this->getFixturesPath() . 'VideoFile.mp4'));
+		$file = Yii::app()->fs->publishFile($this->getFixturesPath() . 'VideoFile.mp4');
+		$this->assertEquals('VideoFile', get_class($file), 'Matching file class');
+		$fileUrl = $file->getUrl();
+		$this->assertUrlExists($fileUrl,'Check VideoFile by url');
+		$this->assertFileExists($file->getPath());
+	}
 }

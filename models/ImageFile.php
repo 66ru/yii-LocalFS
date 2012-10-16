@@ -7,9 +7,6 @@ Yii::import('ext.image.*');
  */
 class ImageFile extends BaseFile
 {
-	private $info = false;
-	private $infoPath = false;
-
 	/**
 	 * @var int jpeg compress quality (0-100)
 	 */
@@ -93,37 +90,9 @@ class ImageFile extends BaseFile
 		return Yii::app()->fs->storageUrl . $thumbPath;
 	}
 
-	/**
-	 * @return void
-	 */
-	private function loadInfo() {
-		if($this->info === false){
 
-			if(is_file($this->getInfoPath())) {
-				$infoContent = file_get_contents($this->getInfoPath());
-				$this->info = unserialize($infoContent);
-			} else {
-				$this->info = array();
-			}
-		}
-	}
 
-	/**
-	 * @return void
-	 */
-	private function saveInfo() {
-		file_put_contents($this->getInfoPath(),serialize($this->info));
-	}
 
-	/**
-	 * @return string
-	 */
-	private function getInfoPath() {
-		if(!$this->infoPath) {
-			$this->infoPath = Yii::app()->fs->getInfoFilePath($this->uid);
-		}
-		return $this->infoPath;
-	}
 
 	/**
 	 * @param array $size

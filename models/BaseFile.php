@@ -13,6 +13,9 @@ class BaseFile extends AFile
 	protected $ext;
 	protected $mimeType;
 
+	protected $info = false;
+	protected $infoPath = false;
+
 	public function __construct($uid,$ext,$url,$size,$mimeType) {
 		$this->uid = $uid;
 		$this->ext = $ext;
@@ -83,6 +86,39 @@ class BaseFile extends AFile
 			return $r->newInstanceArgs($metaData);
 		else
 			return null;
+	}
+
+
+	/**
+	 * @return string
+	 */
+	private function getInfoPath() {
+		if(!$this->infoPath) {
+			$this->infoPath = Yii::app()->fs->getInfoFilePath($this->uid);
+		}
+		return $this->infoPath;
+	}
+
+	/**
+	 * @return void
+	 */
+	protected function loadInfo() {
+		if($this->info === false){
+
+			if(is_file($this->getInfoPath())) {
+				$infoContent = file_get_contents($this->getInfoPath());
+				$this->info = unserialize($infoContent);
+			} else {
+				$this->info = array();
+			}
+		}
+	}
+
+	/**
+	 * @return void
+	 */
+	protected function saveInfo() {
+		file_put_contents($this->getInfoPath(),serialize($this->info));
 	}
 
 	public function validate() {

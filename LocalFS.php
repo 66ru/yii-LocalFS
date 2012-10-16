@@ -246,52 +246,7 @@ class LocalFS extends AFileSystem
 		} catch (Exception $e) {
 			return false;
 		}
-
-		$ext = strtolower(pathinfo($url, PATHINFO_EXTENSION));
-		if (empty($ext) && file_exists($tempFile)) { // we have empty extension. Trying determine using mime type
-			$ext = self::getExtensionByMimeType($tempFile);
-			if (!$ext) {
-				@unlink($tempFile);
-
-				return false;
-			}
-		} elseif (strlen($ext) > 4) {
-			return false;
-		}
-
-		$uid = $this->getUniqId();
-		$publishedFileName = $this->getFilePath($uid, $ext);
-		$newDirName = $this->getFileDir($uid);
-		if (!file_exists($newDirName))
-			@mkdir($newDirName, 0777, true);
-		if (!file_exists($newDirName))
-			throw new CException('Can\'t create ' . $newDirName);
-		rename($tempFile, $publishedFileName);
-		chmod($publishedFileName, 0666);
-
-		$mimeType = CFileHelper::getMimeType($publishedFileName);
-		$size = filesize($publishedFileName);
-		$class = $this->getFileClass($mimeType);
-		$url = $this->storageUrl . $this->getIntermediatePath($uid) . "$uid.$ext";
-		if (!$class || !class_exists($class)) {
-			$class = 'BaseFile';
-		}
-
-		$file = new $class($uid, $ext, $url, $size, $mimeType);
-		/**
-		 * @var $file BaseFile
-		 */
-		if ($file->validate()) {
-			$file->afterPublish();
-		} else {
-			$file->delete();
-
-			return false;
-		}
-
-		if ($this->useCache) $this->_loaded[$file->getUid()] = $file;
-
-		return $file;
+		return $this->publishFile($tempFile);
 	}
 
 	public static function getExtensionByMimeType($fileName)

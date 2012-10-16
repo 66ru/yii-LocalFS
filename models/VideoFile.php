@@ -32,6 +32,7 @@ class VideoFile extends BaseFile
 		$queue = new VideoQueue();
 		$queue->uid = $this->getUid();
 		$queue->status = 0;
+		$queue->error = "";
 		$queue->file = $this->getOriginalUid();
 		$queue->save();
 	}

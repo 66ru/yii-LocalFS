@@ -39,6 +39,18 @@ return array(
 				),
 			),
 		),
+		'db' => array(
+			'class' => 'CDbConnection',
+			'connectionString' => 'mysql:host=localhost;dbname=localfs_test',
+			'emulatePrepare' => true,
+			'username' => 'root',
+			'password' => '',
+			'charset' => 'utf8',
+			'enableProfiling' => false,
+			'enableParamLogging' => false,
+			'tablePrefix' => '',
+			'schemaCachingDuration' => 0,
+		),
 	),
 
 	// application-level parameters that can be accessed

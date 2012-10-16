@@ -1,5 +1,4 @@
 <?php
-Yii::import('ext.image.*');
 /**
  * Created by JetBrains PhpStorm.
  * User: bazilio
@@ -8,9 +7,10 @@ Yii::import('ext.image.*');
  */
 class VideoFile extends BaseFile
 {
-	/** @var null|array  */
-	public $_info = null;
-
+	/**
+	 * @param bool $ext
+	 * @return bool|string
+	 */
 	public function getUrl($ext = false)
 	{
 		if (!$ext)
@@ -24,4 +24,22 @@ class VideoFile extends BaseFile
 			return str_replace($this->uid . ".{$this->ext}", pathinfo($this->uid, PATHINFO_FILENAME) . ".$ext", $preUrl);
 		}
 	}
+
+	/**
+	 * Send video to convertation queue
+	 */
+	public function afterPublish() {
+		$queue = new VideoQueue();
+		$queue->uid = $this->getUid();
+		$queue->file = $this->getOriginalUid();
+		$queue->save();
+	}
+
+	public function delete()
+	{
+		VideoQueue::model()->deleteAllByAttributes(array('uid' => $this->getUid()));
+		parent::delete();
+	}
+
+
 }

@@ -1,0 +1,3 @@
+[submodule "components/ffmpeg-php"]
+	path = components/ffmpeg-php
+	url = git://github.com/char0n/ffmpeg-php.git

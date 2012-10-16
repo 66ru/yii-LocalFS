@@ -72,5 +72,7 @@ class FsTest extends ETestCase
 		$fileUrl = $file->getUrl();
 		$this->assertUrlExists($fileUrl,'Check VideoFile by url');
 		$this->assertFileExists($file->getPath());
+		$count = VideoQueue::model()->countByAttributes(array('uid' => $file->getUid()));
+		$this->assertEquals(1,$count,'Check VideoFile in VideoQueue');
 	}
 }

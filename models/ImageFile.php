@@ -1,6 +1,4 @@
 <?php
-Yii::import('ext.image.*');
-
 /**
  * @property-read int $width
  * @property-read int $height
@@ -15,7 +13,8 @@ class ImageFile extends BaseFile
 	public $width = null;
 	public $height = null;
 
-	public function __construct($uid,$ext,$url,$size,$mimeType,$width = null,$height=null) {
+	public function __construct($uid, $ext, $url, $size, $mimeType, $width = null, $height = null)
+	{
 		$this->uid = $uid;
 		$this->ext = $ext;
 		$this->url = $url;
@@ -25,7 +24,8 @@ class ImageFile extends BaseFile
 		$this->height = $height;
 	}
 
-	public function getMetaData() {
+	public function getMetaData()
+	{
 		return array_merge(parent::getMetaData(), array(
 			'width' => $this->width,
 			'height' => $this->height,
@@ -38,7 +38,7 @@ class ImageFile extends BaseFile
 	 */
 	private function generateThumbnail($size = array())
 	{
-		if(!is_array($size)) $size = array($size);
+		if (!is_array($size)) $size = array($size);
 
 		/** @var $cImage CImageComponent */
 		$cImage = Yii::app()->fs->image;
@@ -50,7 +50,7 @@ class ImageFile extends BaseFile
 
 		$originalImage = $cImage->load($imageFile);
 		$image = $originalImage;
-		if(isset($size['cz']) && $size['cz'] === true)
+		if (isset($size['cz']) && $size['cz'] === true)
 			$image->cropZoom($size[0], $size[1])->quality($this->jpegQuality);
 		else
 			$image->resize($size[0], $size[1], !empty($size[2]) ? $size[2] : Image::AUTO)->quality($this->jpegQuality);
@@ -78,10 +78,10 @@ class ImageFile extends BaseFile
 
 		$thumbPath = Yii::app()->fs->getIntermediatePath($this->uid) . $fileName . $suffix . "." . $this->ext;
 
-		if(!isset($this->info['thumbs']))
+		if (!isset($this->info['thumbs']))
 			$this->info['thumbs'] = array();
 
-		if(!isset($this->info['thumbs'][$suffix])) {
+		if (!isset($this->info['thumbs'][$suffix])) {
 			$this->generateThumbnail($size);
 			array_push($this->info['thumbs'], $suffix);
 		}
@@ -89,9 +89,6 @@ class ImageFile extends BaseFile
 
 		return Yii::app()->fs->storageUrl . $thumbPath;
 	}
-
-
-
 
 
 	/**
@@ -102,32 +99,37 @@ class ImageFile extends BaseFile
 	{
 
 		$suffix = '';
-		if(!is_array($size)) $size = array($size);
+		if (!is_array($size)) $size = array($size);
 		if (empty($size[2]))
 			$size[2] = Image::AUTO;
 
 		if ($size[2] == Image::AUTO)
 			$suffix = "-{$size[0]}x{$size[1]}";
 		elseif ($size[2] == Image::WIDTH)
-			$suffix = "-w{$size[0]}";
-		elseif ($size[2] == Image::HEIGHT)
+			$suffix = "-w{$size[0]}"; elseif ($size[2] == Image::HEIGHT)
 			$suffix = "-h{$size[1]}";
 
-		if(isset($size['cz']) && $size['cz'] === true)
+		if (isset($size['cz']) && $size['cz'] === true)
 			$suffix .= '-cz';
 
 		return $suffix;
 	}
 
 	/**
+	 * @throws CException
 	 * @return ImageFile
 	 */
 	public function watermark()
 	{
-		if(!is_file(Yii::app()->params['WATERMARK']))
+		if (!Yii::app()->fs->watermarkPath)
 			return $this;
-		if((int)Yii::app()->params['WATERMARK_MIN_WIDTH'] > $this->width)
+
+		if (!is_file(Yii::app()->fs->watermarkPath))
+			throw new CException('Can\'t open watermark file');
+
+		if ((int)Yii::app()->fs->watermarkMinWidth > $this->width)
 			return $this;
+
 		$watermark_options = array(
 			'watermark' => Yii::app()->params['WATERMARK'],
 			'halign' => Watermark::ALIGN_RIGHT,
@@ -135,9 +137,10 @@ class ImageFile extends BaseFile
 			'hshift' => -10,
 			'vshift' => -10,
 			'type' => IMAGETYPE_JPEG, // Save result in JPEG to minimize file size
-			'jpeg-quality' => 70,
+			'jpeg-quality' => $this->jpegQuality,
 		);
 		Watermark::output($this->getPath(), $this->getPath(), $watermark_options);
+
 		return $this;
 	}
 
@@ -146,16 +149,19 @@ class ImageFile extends BaseFile
 	 */
 	public function setJpegQuality($jpegQuality)
 	{
-		$this->jpegQuality = $jpegQuality;
+		$jpegQuality = (int)$jpegQuality;
+		if ($jpegQuality <= 100 && $jpegQuality >= 0)
+			$this->jpegQuality = $jpegQuality;
 	}
 
 	/**
+	 * Checks if file correct, allowed, fills width & height
 	 * @return bool
 	 * @throws CException
 	 */
 	public function validate()
 	{
-		$cmd = "identify -format \"%w|%h|%k\" ".escapeshellarg($this->getPath())." 2>&1";
+		$cmd = "identify -format \"%w|%h|%k\" " . escapeshellarg($this->getPath()) . " 2>&1";
 		$returnVal = 0;
 		$output = array();
 		exec($cmd, $output, $returnVal);
@@ -167,6 +173,7 @@ class ImageFile extends BaseFile
 
 			$this->width = $imageSizes[0];
 			$this->height = $imageSizes[1];
+
 			return true;
 		} elseif ($returnVal == 127) {
 			throw new CException('Can\'t find identify');
@@ -175,10 +182,14 @@ class ImageFile extends BaseFile
 		}
 	}
 
-	public function afterPublish() {
+	/**
+	 * Saves image with defined quality (if jpg) and watermarks it (if not animated gif)
+	 */
+	public function afterPublish()
+	{
 		$image = Yii::app()->fs->image->load($this->getPath());
-		$image->quality(95)->save($this->getPath());
-		if(!$this->isAnimated())
+		$image->quality($this->jpegQuality)->save($this->getPath());
+		if (!$this->isAnimated())
 			$this->watermark();
 	}
 

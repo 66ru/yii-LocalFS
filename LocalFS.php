@@ -39,11 +39,33 @@ class LocalFS extends AFileSystem
 	 */
 	public $useCache = true;
 
+	/* Image section */
+
 	/**
 	 * @var null|string path to watermark file. Leave empty to disable watermarks
 	 */
 	public $watermarkPath = null;
 
+	/**
+	 * @var int minimal image width in px to watermark image
+	 */
+	public $watermarkMinWidth = 0;
+
+	/**
+	 * @var CImageComponent
+	 */
+	public $image;
+
+	/* Video section */
+
+	/** @var string */
+	public $ffmpegBinPath = '/usr/local/bin/ffmpeg';
+
+	/**
+	 * MP4Box is a part of gpac package
+	 * @var string
+	 */
+	public $MP4BoxBinPath = '/usr/bin/MP4Box';
 	/**
 	 * @var array allowed image types
 	 */
@@ -54,10 +76,7 @@ class LocalFS extends AFileSystem
 	 */
 	private $_loaded = array();
 
-	/**
-	 * @var CImageComponent
-	 */
-	public $image;
+
 
 	/**
 	 * @param $path
@@ -91,7 +110,6 @@ class LocalFS extends AFileSystem
 
 		$mimeType = CFileHelper::getMimeType($path);
 		$size = filesize($path);
-		var_dump($mimeType,$size);
 		$class = $this->getFileClass($mimeType);
 
 		$url = $this->storageUrl . $this->getIntermediatePath($uid) . "$uid.$ext";

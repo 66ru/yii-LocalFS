@@ -25,6 +25,10 @@ abstract class AFile extends CComponent
 	abstract public function getMimeType();
 
 	abstract public function delete();
-	abstract public function validate();
-	abstract public function afterPublish();
+
+	public function afterPublish() {}
+
+	public function validate() {
+		return true;
+	}
 }

@@ -30,6 +30,7 @@ abstract class AFileSystem extends CApplicationComponent
 
 	/**
 	 * @param $path
+	 * @param array $options
 	 * @return AFile
 	 */
 	public abstract function publishFile($path, $options = array());

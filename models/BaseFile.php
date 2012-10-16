@@ -24,11 +24,17 @@ class BaseFile extends AFile
 		$this->mimeType = $mimeType;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getUrl()
 	{
 		return $this->url;
 	}
 
+	/**
+	 * @return int size in bytes
+	 */
 	public function getSize()
 	{
 		if(!$this->size)
@@ -36,34 +42,57 @@ class BaseFile extends AFile
 		return $this->size;
 	}
 
+	/**
+	 * @return string file id (base64 encoded model's params)
+	 */
 	public function getUid()
 	{
 		return base64_encode(json_encode($this->getMetaData()));
 	}
+
+	/**
+	 * @return string
+	 */
 	public function getExt()
 	{
 		return $this->ext;
 	}
 
+	/**
+	 * @return string unique file id (like in file name)
+	 */
 	public function getOriginalUid() {
 		return $this->uid;
 	}
 
+	/**
+	 * @return string mimetype
+	 */
 	public function getMimeType()
 	{
 		return $this->mimeType;
 	}
 
+	/**
+	 * Removes file
+	 * @return void
+	 */
 	public function delete()
 	{
 		Yii::app()->fs->removeFile($this);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getPath()
 	{
 		return Yii::app()->fs->getFilePath($this->uid, $this->ext);
 	}
 
+	/**
+	 * @return array Model params
+	 */
 	public function getMetaData() {
 		return array(
 			'uid' => $this->uid,
@@ -74,12 +103,20 @@ class BaseFile extends AFile
 		);
 	}
 
+	/**
+	 * Fills model's params
+	 * @param array $metaData
+	 */
 	public function loadMetaData($metaData) {
 		foreach($metaData as $k => $v) {
 			if(isset($this->$k)) $this->$k = $v;
 		}
 	}
 
+	/**
+	 * @param $metaData
+	 * @return null|BaseFile
+	 */
 	public static function loadFromMetaData($metaData) {
 		$r = new ReflectionClass(get_called_class());
 		if (is_array($metaData))
@@ -90,6 +127,7 @@ class BaseFile extends AFile
 
 
 	/**
+	 * Returns path to metadata file
 	 * @return string
 	 */
 	private function getInfoPath() {
@@ -100,6 +138,7 @@ class BaseFile extends AFile
 	}
 
 	/**
+	 * Loads metadata from file
 	 * @return void
 	 */
 	protected function loadInfo() {
@@ -115,15 +154,28 @@ class BaseFile extends AFile
 	}
 
 	/**
+	 * Saves metadata to file
 	 * @return void
 	 */
 	protected function saveInfo() {
 		file_put_contents($this->getInfoPath(),serialize($this->info));
 	}
 
-	public function validate() {
-		return true;
+	/**
+	 * @param string $key
+	 * @param mixed $value
+	 */
+	public function setInfo($key,$value) {
+		$this->info[(string)$key] = $value;
+		$this->saveInfo();
 	}
 
-	public function afterPublish() {}
+	/**
+	 * @param string $key
+	 * @return null|mixed
+	 */
+	public function getInfo($key) {
+		$this->loadInfo();
+		return isset($this->info[(string)$key]) ? $this->info[(string)$key] : null;
+	}
 }

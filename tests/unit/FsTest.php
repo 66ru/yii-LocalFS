@@ -66,7 +66,6 @@ class FsTest extends ETestCase
 		/**
 		 * @var VideoFile $file
 		 */
-		var_dump(realpath($this->getFixturesPath() . 'VideoFile.mp4'));
 		$file = Yii::app()->fs->publishFile($this->getFixturesPath() . 'VideoFile.mp4');
 		$this->assertEquals('VideoFile', get_class($file), 'Matching file class');
 		$fileUrl = $file->getUrl();

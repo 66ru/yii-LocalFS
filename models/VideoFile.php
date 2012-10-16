@@ -31,6 +31,7 @@ class VideoFile extends BaseFile
 	public function afterPublish() {
 		$queue = new VideoQueue();
 		$queue->uid = $this->getUid();
+		$queue->status = 0;
 		$queue->file = $this->getOriginalUid();
 		$queue->save();
 	}

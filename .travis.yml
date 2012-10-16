@@ -33,7 +33,7 @@ before_script:
   - sudo service php5-fpm restart
   - mysql -e "create database IF NOT EXISTS localfs_test DEFAULT CHARACTER SET utf8;" -uroot
   - cp ./protected/extensions/yii-LocalFS/travis-conf/project/* ./protected/config/
-  - cp ./protected/extensions/yii-LocalFS/migrations ./protected/
+  - cp ./protected/extensions/yii-LocalFS/migrations ./protected/ -R
   - ./protected/yiic migrate up --interactive=0
   - cd ./protected/tests
 notifications:

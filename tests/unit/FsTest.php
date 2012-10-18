@@ -25,6 +25,29 @@ class FsTest extends ETestCase
 		$this->assertEquals('good', $fileContent, 'load file from url');
 	}
 
+	public function testInfo()
+	{
+		/**
+		 * @var BaseFile $file
+		 */
+		$file = Yii::app()->fs->publishFile($this->getFixturesPath() . 'BaseFile.txt');
+
+		$file->setInfo('string', 'string');
+		$file->setInfo(0, 0);
+		$file->setInfo(-1, -1);
+		$file->setInfo(1, 1);
+		$file->setInfo('1', '1');
+		$file->setInfo('array', array('key' => 'value'));
+
+		$file = Yii::app()->fs->getFile($file->getUid());
+
+		$this->assertEquals('string', $file->getInfo('string'), 'Check getInfo basic string');
+		$this->assertEquals(0, $file->getInfo(0), 'Check getInfo basic int');
+		$this->assertEquals(-1, $file->getInfo(-1), 'Check getInfo int < 0');
+		$this->assertEquals(1, $file->getInfo('1'), 'Check getInfo int proper key conversion');
+		$this->assertEquals(array('key' => 'value'), $file->getInfo('array'), 'Check getInfo array');
+	}
+
 	public function testPublishImageFile()
 	{
 		/**

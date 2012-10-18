@@ -25,6 +25,21 @@ class FsTest extends ETestCase
 		$this->assertEquals('good', $fileContent, 'load file from url');
 	}
 
+	public function testDelete()
+	{
+		/**
+		 * @var ImageFile $file
+		 */
+		$file = Yii::app()->fs->publishFile($this->getFixturesPath() . 'ImageFile/ImageFile.png');
+		$file->getThumbnail(array(200, 200));
+
+		$file->delete();
+
+		$command = 'ls -l ' . pathinfo($file->getPath(), PATHINFO_DIRNAME) . '/' . $file->getOriginalUid() . '*';
+		exec($command, $output, $code);
+		$this->assertEquals(2, $code, 'Check all files deleted.');
+	}
+
 	public function testInfo()
 	{
 		/**
@@ -46,6 +61,9 @@ class FsTest extends ETestCase
 		$this->assertEquals(-1, $file->getInfo(-1), 'Check getInfo int < 0');
 		$this->assertEquals(1, $file->getInfo('1'), 'Check getInfo int proper key conversion');
 		$this->assertEquals(array('key' => 'value'), $file->getInfo('array'), 'Check getInfo array');
+
+		$fileContent = file_get_contents($file->getPath());
+		$this->assertEquals('good', $fileContent, 'Check content after writing info');
 	}
 
 	public function testPublishImageFile()
@@ -69,7 +87,6 @@ class FsTest extends ETestCase
 
 	public function subTestThumbnail($path)
 	{
-
 		/** @var $file ImageFile */
 		$file = Yii::app()->fs->publishFile($path);
 		$fixture = pathinfo($path, PATHINFO_FILENAME);
@@ -108,6 +125,7 @@ class FsTest extends ETestCase
 		$count = VideoQueue::model()->countByAttributes(array('uid' => $file->getUid()));
 		$this->assertEquals(1, $count, 'Check VideoFile in VideoQueue');
 	}
+
 
 	/**
 	 * @param ImageFile $imageFile

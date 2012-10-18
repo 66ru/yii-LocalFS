@@ -171,13 +171,13 @@ class LocalFS extends AFileSystem
 
 		$dirName = $this->getFileDir($model->getOriginalUid());
 		$fileName = pathinfo($this->getFileName($model->getOriginalUid(), $model->getExt()),PATHINFO_FILENAME);
-		foreach (glob($dirName . '/' . $fileName . '*') as $file)
+		foreach (glob($dirName . $fileName . '*') as $file)
 			unlink($file);
 	}
 
 	public function getInfoFilePath($uid)
 	{
-		return $this->getFilePath($uid, 'txt');
+		return $this->getFilePath($uid, 'fsinfo');
 	}
 
 	public function getFilePath($uid, $ext)

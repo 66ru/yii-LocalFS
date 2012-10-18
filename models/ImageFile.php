@@ -66,7 +66,7 @@ class ImageFile extends BaseFile
 	 */
 	public function getThumbnail($size)
 	{
-		if ($size[0] > $this->width && $size[1] > $this->height)
+		if ($size[0] >= $this->width && $size[1] >= $this->height)
 			return $this->getUrl();
 
 		$path = $this->getPath();

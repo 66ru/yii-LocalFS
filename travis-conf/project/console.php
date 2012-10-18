@@ -15,6 +15,7 @@ return array(
 			'class' => 'ext.yii-LocalFS.LocalFS',
 			'storagePath' => dirname(__FILE__) . '/../../storage/',
 			'storageUrl' => 'http://localhost/storage/',
+			'useCache' => false,
 		),
 		'log'=>array(
 			'class'=>'CLogRouter',

@@ -275,21 +275,37 @@ class Image_GD_Driver extends Image_Driver
 		$src_h = $new_height;
 
 		if ($width > $height) {
-			$src_w = $src_h = $height;
+			$src_h = $height;
+			$src_w = ($height / $new_height) * $new_width;
 			$src_y = 0;
-			$src_x = ($width - $height) / 2;
+			$src_x = ($width - $src_w) / 2;
+			if($src_w > $width) {
+				$src_w = $width;
+				$src_x = 0;
+				$src_h = ($width / $new_width) * $new_height;
+				$src_y = ($height - $src_h) / 2;
+			}
 		}
 
 		if ($width < $height) {
-			$src_w = $src_h = $width;
+			$src_w = $width;
+			$src_h = ($width / $new_width) * $new_height;
 			$src_x = 0;
-			$src_y = ($height - $width) / 2;
+			$src_y = ($height - $src_h) / 2;
+			if($src_h > $height) {
+				$src_h =$height;
+				$src_y = 0;
+				$src_w = ($height / $new_height) * $new_width;
+				$src_x = ($width - $src_w) / 2;
+			}
 		}
 
 		if ($height === $width) {
 			$src_x = $src_y = 0;
 			$src_w = $src_h = $width;
 		}
+
+		/*var_dump($src_w / $src_h, $new_width / $new_height); die;*/
 		// Execute the crop
 		if ($status = imagecopyresampled($img, $this->tmp_image, 0, 0, $src_x, $src_y, $new_width, $new_height, $src_w, $src_h)) {
 			// Swap the new image for the old one

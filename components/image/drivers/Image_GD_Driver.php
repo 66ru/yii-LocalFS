@@ -287,6 +287,19 @@ class Image_GD_Driver extends Image_Driver
 			}
 		}
 
+		if ($width < $height) {
+			$src_w = $width;
+			$src_h = ($width / $new_width) * $new_height;
+			$src_x = 0;
+			$src_y = ($height - $src_h) / 2;
+			if($src_h > $height) {
+				$src_h =$height;
+				$src_y = 0;
+				$src_w = ($height / $new_height) * $new_width;
+				$src_x = ($width - $src_w) / 2;
+			}
+		}
+
 		if ($height === $width) {
 			$src_x = $src_y = 0;
 			$src_w = $src_h = $width;

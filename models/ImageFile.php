@@ -81,7 +81,7 @@ class ImageFile extends BaseFile
 		if (!isset($this->info['thumbs']))
 			$this->info['thumbs'] = array();
 
-		if (!isset($this->info['thumbs'][$suffix])) {
+		if (!in_array($suffix, $this->info['thumbs'])) {
 			$this->generateThumbnail($size);
 			array_push($this->info['thumbs'], $suffix);
 		}

@@ -158,7 +158,7 @@ class BaseFile extends AFile
 	 * @return void
 	 */
 	protected function saveInfo() {
-		file_put_contents($this->getInfoPath(),serialize($this->info));
+		file_put_contents($this->getInfoPath(),serialize($this->info), LOCK_EX);
 	}
 
 	/**

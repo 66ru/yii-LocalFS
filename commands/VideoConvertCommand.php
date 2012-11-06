@@ -21,7 +21,8 @@ class VideoConvertCommand extends CConsoleCommand
 	{
 		$criteria = new CDbCriteria();
 		$criteria->limit = 1;
-		$criteria->condition = 'status >= 0';
+		$criteria->condition = 'status > ' . VideoFile::STATUS_ERROR;
+		$criteria->order = 'status DESC';
 
 		while ($items = VideoQueue::model()->findAll($criteria)) {
 			/** @var $item VideoQueue */
@@ -148,16 +149,17 @@ class VideoConvertCommand extends CConsoleCommand
 	protected function postponeFileConvert($item)
 	{
 		$item->error = $this->note;
-		$item->status = -10;
+		$item->status = VideoFile::STATUS_ERROR;
 
 		return $item->save();
 	}
 
 	/**
 	 * @param string $command
+	 * @param string $output
 	 * @return int the termination status of the process that was run.
 	 */
-	protected function runConvertCommand($command)
+	protected function runConvertCommand($command, &$output = '')
 	{
 		$descriptors = array(
 			array('pipe', 'r'),
@@ -167,14 +169,15 @@ class VideoConvertCommand extends CConsoleCommand
 		$process = proc_open($command, $descriptors, $pipes);
 		// Close STDIN pipe
 		fclose($pipes[0]);
-		$out = stream_get_contents($pipes[1]);
+		$out = stream_get_contents($pipes[1], 20 * 1024);
+		while (!feof($pipes[1])) {
+			$buffer = stream_get_contents($pipes[1], 20 * 1024);
+		}
+		$out .= (isset($buffer)) ? "~~~~~~~~~~~~~~~~~~~~~\n\n\n\n\n~~~~~~~~~~~~~~~~~~~~~" . $buffer : '';
 		fclose($pipes[1]);
+		$output = "***Вывод STDOUT: ***\r\n" . $out . "\r\n";
 
 		// Wait for process to terminate and store return value
-		$returnCode = proc_close($process);
-		if ($returnCode)
-			echo "*** STDOUT: ***\r\n" . $out . "\r\n";
-
-		return $returnCode;
+		return proc_close($process);
 	}
 }

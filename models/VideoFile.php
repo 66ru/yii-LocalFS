@@ -7,6 +7,11 @@
  */
 class VideoFile extends BaseFile
 {
+	const STATUS_DEFAULT = 50;
+	const STATUS_LOW_PRIORITY = 10;
+	const STATUS_HIGH_PRIORITY = 80;
+	const STATUS_ERROR = -10;
+
 	/**
 	 * @param bool $ext
 	 * @return bool|string
@@ -28,10 +33,11 @@ class VideoFile extends BaseFile
 	/**
 	 * Send video to convertation queue
 	 */
-	public function afterPublish() {
+	public function afterPublish()
+	{
 		$queue = new VideoQueue();
 		$queue->uid = $this->getUid();
-		$queue->status = 0;
+		$queue->status = self::STATUS_DEFAULT;
 		$queue->error = "";
 		$queue->file = $this->getOriginalUid();
 		$queue->save();

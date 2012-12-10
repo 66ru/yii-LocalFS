@@ -15,20 +15,21 @@ before_script:
   - cp ./protected/extensions/yii-LocalFS/tests/* ./protected/tests/ -R
   - mkdir ./protected/tests/log
   - sudo apt-get update
-  - sudo apt-get install nginx-full php5-fpm memcached php5-memcached
+  - sudo apt-get install nginx-full php5-fpm memcached php5-memcached php5-cli php5-curl php5-mysql php5-gd imagemagick
+  - phpenv global system
   - sudo rm /etc/php5/fpm/conf.d/* -R
   - sudo cp ./protected/extensions/yii-LocalFS/travis-conf/conf.d/* /etc/php5/fpm/conf.d/
   - sudo cp ./protected/extensions/yii-LocalFS/travis-conf/php.ini /etc/php5/fpm/php.ini
   - sudo rm /etc/nginx/sites-enabled/*
   - sudo cp ./protected/extensions/yii-LocalFS/travis-conf/site.nginx /etc/nginx/sites-enabled/
   - sudo cp ./protected/extensions/yii-LocalFS/travis-conf/www.conf /etc/php5/fpm/pool.d/www.conf
-#  - sudo rm /home/travis/.phpenv/versions/5.3.17/etc/conf.d/xdebug.ini
-  - sudo pear channel-discover pear.phpunit.de
-  - sudo pear channel-discover pear.symfony.com
-  - sudo pear install -a phpunit/PHPUnit
-  - sudo pear install phpunit/PHPUnit_Selenium
-  - sudo pear install phpunit/DbUnit
-  - sudo pear install phpunit/PHPUnit_Story
+# composer
+  - sudo sh -c "curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin"
+  - sudo mv /usr/local/bin/composer.phar /usr/local/bin/composer
+  - cd ./travis-conf
+  - composer install
+  - cd ..
+# restarting services
   - sudo service nginx restart
   - sudo service php5-fpm restart
   - mysql -e "create database IF NOT EXISTS localfs_test DEFAULT CHARACTER SET utf8;" -uroot

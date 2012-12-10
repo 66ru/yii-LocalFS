@@ -26,9 +26,9 @@ before_script:
 # composer
   - sudo sh -c "curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin"
   - sudo mv /usr/local/bin/composer.phar /usr/local/bin/composer
-  - cd ./travis-conf
+  - cd ./protected/extensions/yii-LocalFS/travis-conf/
   - composer install
-  - cd ..
+  - cd ../../../../
 # restarting services
   - sudo service nginx restart
   - sudo service php5-fpm restart

@@ -12,6 +12,8 @@ before_script:
   - rm ./protected/tests/fixtures -R
   - rm ./protected/tests/functional -R
   - rm ./protected/tests/unit -R
+  - ls /home/travis/
+  - ls /home/travis/builds
   - ls /home/travis/builds/mediasite/
   - ls /home/travis/builds/mediasite/yii-LocalFS
   - ls /home/travis/builds/mediasite/yii-LocalFS/tests/

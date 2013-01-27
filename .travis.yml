@@ -7,11 +7,14 @@ before_script:
   - cd fs-test
   - mkdir ./libs
   - git clone git://github.com/yiisoft/yii.git libs/yii
-  - echo "yes" | php libs/yii/framework/yiic webapp . git  > /dev/null
+  - echo yes | php libs/yii/framework/yiic webapp . git  > /dev/null
   - ln -s /home/travis/builds/mediasite/yii-LocalFS/ /home/travis/build/mediasite/fs-test/protected/extensions/yii-LocalFS
   - rm ./protected/tests/fixtures -R
   - rm ./protected/tests/functional -R
   - rm ./protected/tests/unit -R
+  - ls /home/travis/builds/mediasite/
+  - ls /home/travis/builds/mediasite/yii-LocalFS
+  - ls /home/travis/builds/mediasite/yii-LocalFS/tests/
   - cp /home/travis/builds/mediasite/yii-LocalFS/tests/* ./protected/tests/ -R
   - mkdir ./protected/tests/log
   - sudo apt-get update > /dev/null

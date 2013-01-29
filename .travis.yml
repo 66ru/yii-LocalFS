@@ -6,7 +6,7 @@ before_script:
   - mkdir ./fs-test
   - cd fs-test
   - mkdir ./libs
-  - git clone git://github.com/yiisoft/yii.git libs/yii
+  - git clone git://github.com/yiisoft/yii.git libs/yii --depth=1
   - echo yes | php libs/yii/framework/yiic webapp . git  > /dev/null
   - ln -s /home/travis/build/mediasite/yii-LocalFS/ /home/travis/build/mediasite/fs-test/protected/extensions/yii-LocalFS
   - rm ./protected/tests/fixtures -R

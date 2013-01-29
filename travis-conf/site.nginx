@@ -2,10 +2,10 @@ server {
     listen       80 default;
     server_name  .localhost;
 
-    set $root_path  '/home/travis/builds/mediasite/fs-test';
+    set $root_path  '/home/travis/build/mediasite/fs-test';
 
-	access_log /home/travis/builds/mediasite/fs-test/protected/tests/log/host.access.log;
-    error_log  /home/travis/builds/mediasite/fs-test/protected/tests/log/host.error.log error;
+	access_log /home/travis/build/mediasite/fs-test/protected/tests/log/host.access.log;
+    error_log  /home/travis/build/mediasite/fs-test/protected/tests/log/host.error.log error;
 
     location / {
         try_files $uri $uri/ @fallback;

@@ -28,7 +28,7 @@ before_script:
   - sudo sh -c "curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin" > /dev/null
   - sudo mv /usr/local/bin/composer.phar /usr/local/bin/composer
   - composer install > /dev/null
-  - ls
+  - ls vendor/bin
   - cd ../../../../
 # restarting services
   - sudo service nginx restart

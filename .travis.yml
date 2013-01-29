@@ -25,7 +25,6 @@ before_script:
   - sudo cp ./protected/extensions/yii-LocalFS/travis-conf/www.conf /etc/php5/fpm/pool.d/www.conf
 # composer
   - cd ./protected/extensions/yii-LocalFS/travis-conf/
-  - composer install
   - sudo sh -c "curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin"
   - sudo mv /usr/local/bin/composer.phar /usr/local/bin/composer
   - composer install

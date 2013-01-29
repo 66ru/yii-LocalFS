@@ -40,4 +40,4 @@ before_script:
   - cd ./protected/tests
 notifications:
   email: false
-script: ./protected/extensions/yii-LocalFS/travis-conf/vendor/bin/phpunit --verbose --debug .
+script: ../extensions/yii-LocalFS/travis-conf/vendor/bin/phpunit --verbose --debug .
